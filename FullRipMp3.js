@@ -5,14 +5,42 @@ const getVideoId = function() {
 };
 
 (function () {
-  var videoId = getVideoId();
-  console.log("Full Rip Ext Loaded with video id: " + videoId);
+  const videoId = getVideoId();
+  const infoSelector = '#info #container';
 
-  var mp3path ='http://www.fullrip.net/mp3/' + encodeURIComponent(videoId);
-  var videopath = 'http://www.fullrip.net/video/' + encodeURIComponent(videoId);
-  var div_embed = document.getElementById('watch7-subscription-container');
+  const mp3Path ='http://www.fullrip.net/mp3/' + encodeURIComponent(videoId);
+  const videoPath = 'http://www.fullrip.net/video/' + encodeURIComponent(videoId);
 
-   if (div_embed) {
-    div_embed.innerHTML = div_embed.innerHTML + '&nbsp;&nbsp;<input type="button" onClick="javascript:window.open(\''+ mp3path +'\');" value="Get Mp3!"></button>&nbsp;<input type="button" onClick="javascript:(a = (b = document).createElement(\'script\')).src = \'http://fullrip.net/bookmark.js\', b.body.appendChild(a);void(0);" value="Get Video!"></button>';
-  }
+  const downloadText = document.createElement("span");
+  downloadText.innerHTML = "Download:";
+
+  const mp3Button = document.createElement("button");
+  mp3Button.innerHTML = "MP3";
+  mp3Button.onclick = () => window.open(mp3Path);
+
+  const videoButton = document.createElement("button");
+  videoButton.innerHTML = "Video";
+  videoButton.onclick = () => window.open(videoPath);
+
+  const maxSeconds = 10;
+  let waitedSeconds = 0;
+
+  // Info doesn't load immediately, so have to check over and over
+  let intv = setInterval(() => {
+    const infoContainer = document.querySelector(infoSelector);
+
+    if (infoContainer) {
+      infoContainer.appendChild(downloadText);
+      infoContainer.appendChild(mp3Button);
+      infoContainer.appendChild(videoButton);
+      clearInterval(intv);
+    } else {
+      waitedSeconds++;
+
+      if (waitedSeconds > maxSeconds) {
+        console.error(`FullRip: HTML element with path '${infoSelector}' didn't load after ${maxSeconds} seconds.`);
+        clearInterval(intv);
+      }
+    }
+  }, 1000);
 })();
