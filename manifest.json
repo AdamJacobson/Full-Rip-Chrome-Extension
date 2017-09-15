@@ -1,0 +1,17 @@
+{
+	"name": "FullRip.net YT Mp3 Downloader",
+	"version": "2.0.1",
+	"manifest_version": 2,
+	"description": "Add links to convert and download mp3 from youtube.",
+	"icons": { 
+		"16": "16.png",
+        "48": "48.png",
+        "128": "128.png" 
+	},
+	"content_scripts": [
+    {
+  	  "matches": ["http://*.youtube.com/watch?*","http://youtube.com/watch?*","https://*.youtube.com/watch?*","https://youtube.com/watch?*"],
+      "js" : ["FullRipMp3.js"]
+    }
+  ]
+}
